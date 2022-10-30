@@ -11,16 +11,19 @@ class EmployeeDetails(models.Model):
     full_name = models.CharField(max_length=100)
     age = models.IntegerField()
     department = models.CharField(max_length=100)
-    designation = models.CharField(choices=DESIGNATION_CHOICES, max_length=50)
+    designation = models.CharField(max_length=100)
     salary = models.FloatField(default=10000)
     
     def __str__(self):
         return self.full_name
     
-    class meta:
-        verbose_plurals = "Employee Details"
+    class Meta:
+        verbose_name_plural = "Employee Details"
 
 class InsuaranceDetails(models.Model):
     full_name = models.ForeignKey(EmployeeDetails, on_delete=models.CASCADE)
     policy_name = models.CharField(max_length=50)
     policy_number = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name_plural = "Insurance Details"
