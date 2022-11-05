@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% block content %}
+<h1>testing</h1>
+
+{% for employee in employee_detail %}
+<form action="{% url 'update_employees' employee.id %}" method="POST">
+    {% csrf_token %}
+<div class="container">
+  
+  <div class="card" style="width: 18rem">
+    {{employee.image}}
+    <img
+      class="card-img-top"
+      style="height: 100px; width: 100px"
+      src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"
+      alt="Card image cap"
+    />
+    <div class="card-body">
+      <h5 class="card-title">Name: {{employee.full_name}}</h5>
+      <input
+          required
+          type="text"
+          id="full_name"
+          class="form-control"
+          name="full_name"
+          placeholder="Input name to update"
+        />
+      <p class="card-text">Department: {{employee.department}}</p>
+      <p class="card-text">Age: {{employee.age}} Years</p>
+      <p class="card-text">Designation: {{employee.designation}}</p>
+      <p class="card-text">Salary: {{employee.salary}} INR</p>
+      <a href="{% url 'delete_employees' employee.id %}" class="btn btn-primary"
+        >Delete user</a>
+      <a href="{% url 'update_employees' employee.id %}" class="btn btn-primary"
+        ><button type="submit">Update user </button></a>
+    </div>
+  </div>
+</div>
+</form>
+{% endfor %} {% endblock %}

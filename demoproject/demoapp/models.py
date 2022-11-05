@@ -13,7 +13,8 @@ class EmployeeDetails(models.Model):
     department = models.CharField(max_length=100)
     designation = models.CharField(max_length=100)
     salary = models.FloatField(default=10000)
-    
+    image = models.ImageField(upload_to="employee_image", null=True, blank=True,
+                        default="static/employee_image/profile_image.jpg")
     def __str__(self):
         return self.full_name
     

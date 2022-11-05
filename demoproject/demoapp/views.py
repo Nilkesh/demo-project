@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from demoapp.models import EmployeeDetails,InsuaranceDetails
 
@@ -10,7 +10,7 @@ def index(request):
         designation = request.POST.get('designation')
         salary = request.POST.get('salary')
         department = request.POST.get('department')
-
+        
         try:
             employee_Detail = EmployeeDetails()
             employee_Detail.full_name = full_name
@@ -54,3 +54,23 @@ def policy(request):
         except Exception as e:
             print(e)
     return render(request,"policy.html")
+
+def display_employees(request):
+    employee_detail = EmployeeDetails.objects.all()
+    print(len(employee_detail))
+    context = {"employee_detail": employee_detail}
+    return render(request, "employee_details.html", context)
+
+def delete_employees(request, id):
+    try:
+        print("id", id)
+        EmployeeDetails.objects.filter(id=id).delete()
+        return redirect('display_employees')
+    except Exception as e:
+        return JsonResponse({"Failure": "Something went wrong"}, safe=False)
+
+def update_employee(request, id):
+    if request.method == "POST":
+        EmployeeDetails.objects.filter(id=id) \
+                        .update(full_name=request.POST.get('full_name'))
+    return redirect('display_employees')
