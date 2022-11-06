@@ -8,6 +8,7 @@ DESIGNATION_CHOICES =(
     ("MG", "Manager"),
 )
 class EmployeeDetails(models.Model):
+    # pk_id = models.CharField(max_length=100, primary_key=True)
     full_name = models.CharField(max_length=100)
     age = models.IntegerField()
     department = models.CharField(max_length=100)

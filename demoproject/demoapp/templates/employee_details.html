@@ -1,13 +1,18 @@
 {% extends 'base.html' %} {% block content %}
-<h1>testing</h1>
 
+{% if user.is_authenticated %}
+<h1>{{user}}</h1><br>
+<a href="{% url 'logout_user' %}"><button>Logout</button></a>
+{% else %}
+<a href="{% url 'login_user' %}"><button>Sign in</button></a>
+{% endif %}
 {% for employee in employee_detail %}
 <form action="{% url 'update_employees' employee.id %}" method="POST">
     {% csrf_token %}
 <div class="container">
   
   <div class="card" style="width: 18rem">
-    {{employee.image}}
+    {{employee.image}}   {{user.is_authenticated}}
     <img
       class="card-img-top"
       style="height: 100px; width: 100px"
