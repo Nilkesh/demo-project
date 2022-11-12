@@ -1,6 +1,12 @@
 from django.urls import path, include
 from . import views
+
+
+
+
+
 urlpatterns = [
+    path('login_user_jwt/', views.login_user_jwt, name="login_user_jwt"),
     path('index/', views.index, name="index"),
     path('policy/', views.policy, name="policy"),
     path('display_employees/', views.display_employees, name="display_employees"),

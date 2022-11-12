@@ -1,3 +1,8 @@
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, response
 from demoapp.models import EmployeeDetails,InsuaranceDetails
@@ -10,7 +15,34 @@ from rest_framework.response import Response
 from django.core import serializers
 import json
 
-# Create your views here.
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+
+@csrf_exempt
+def login_user_jwt(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            result = {}
+            tokens = get_tokens_for_user(user)
+            result['access'] = tokens['access']
+            result['refresh'] = tokens['refresh']
+            return JsonResponse(result, safe=False)
+        else:
+            return JsonResponse({"Message": "invalid tokens"})
+
+
+
 def index(request):
     if request.method == "POST":
         full_name = request.POST.get('full_name')
@@ -64,13 +96,16 @@ def policy(request):
     return render(request,"policy.html")
 
 @csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def display_employees(request):
     employee_detail = EmployeeDetails.objects.all()
     print(len(employee_detail))
     serializer = serializers.serialize('json', employee_detail)
-    context = {"employee_detail": employee_detail}
+    #context = {"employee_detail": employee_detail}
     # return render(request, "employee_details.html", context)
     return JsonResponse(json.loads(serializer), safe=False)
+
 
 def delete_employees(request, id):
     try:
