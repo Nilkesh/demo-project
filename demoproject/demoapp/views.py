@@ -116,6 +116,7 @@ class EmployeeDetailsViewset(viewsets.ViewSet):
     serializer_class = EmployeeDetailsSerializer
 
     def list(self, request):
+        print("Inside list method")
         get_all_employee = EmployeeDetails.objects.all()
         data = EmployeeDetailsSerializer(get_all_employee,many=True)
         return Response({'data': data.data}, content_type = 'application/json' )
