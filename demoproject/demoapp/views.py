@@ -122,6 +122,7 @@ class EmployeeDetailsViewset(viewsets.ViewSet):
         return Response({'data': data.data}, content_type = 'application/json' )
     
     def destroy(self, request, id):
+        print("inside destroy method")
         user_name = EmployeeDetails.objects.filter(id=id)
         user_name = user_name.full_name
         EmployeeDetails.objects.filter(id=id).delete()
