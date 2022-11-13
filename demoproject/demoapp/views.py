@@ -15,6 +15,9 @@ from rest_framework.response import Response
 from django.core import serializers
 import json
 
+class EmployeeDetailsViewset(viewsets.ModelViewSet):
+    queryset = EmployeeDetails.objects.all()
+    serializer_class = EmployeeDetailsSerializer
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -163,3 +166,22 @@ class EmployeeDetailsViewset(viewsets.ViewSet):
         EmployeeDetails.objects.filter(id=id).delete()
         return Response({'data':f" {user_name} user is deleted"}, 
                         content_type = 'application/json' )
+@csrf_exempt
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            User.objects.create(
+                username=username, password=password)
+            
+            # reg = User()
+            # reg.username = username
+            # reg.password = password
+            # reg.save()
+            return JsonResponse('SUccess', safe=False)
+        except Exception as e:
+            print(e)
+            return JsonResponse({'message':'error'}, safe=False)
+    else:
+        return JsonResponse("failure", safe=False)

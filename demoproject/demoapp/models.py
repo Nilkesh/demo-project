@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 DESIGNATION_CHOICES =(
     ("DV", "Developer"),
@@ -21,6 +21,17 @@ class EmployeeDetails(models.Model):
     
     class Meta:
         verbose_name_plural = "Employee Details"
+
+class Profile(models.Model):
+    username = models.OneToOneField(User, max_length=100, on_delete=models.CASCADE)
+    firstname = models.CharField(max_length=100, null=True, blank=True)
+    lastname = models.CharField(max_length=100, null=True, blank=True)
+    
+    def __str__(self):
+        return self.firstname
+    
+    class Meta:
+        verbose_name_plural = "Profiles"
 
 class InsuaranceDetails(models.Model):
     full_name = models.ForeignKey(EmployeeDetails, on_delete=models.CASCADE)

@@ -1,11 +1,12 @@
 from django.urls import path, include
 from . import views
+from rest_framework import routers
 
-
-
-
+router = routers.DefaultRouter()
+router.register("router_employee_detail", views.EmployeeDetailsViewset, basename="router_employee")
 
 urlpatterns = [
+    path('register/', views.register, name='register'),
     path('login_user_jwt/', views.login_user_jwt, name="login_user_jwt"),
     path('index/', views.index, name="index"),
     path('policy/', views.policy, name="policy"),
@@ -19,3 +20,5 @@ urlpatterns = [
     path('employee_details/<str:id>', views.EmployeeDetailsViewset.as_view({'delete': 'destroy'}), name="individual_employee_update"),
 
 ]
+
+urlpatterns += router.urls
